@@ -9,29 +9,30 @@ class LanguageItem extends StatelessWidget {
   const LanguageItem({
     super.key,
     required this.item,
-    required this.onTap, required this.focusNode,
+    required this.onTap, required this.focusNode, required this.isFocused,
   });
   final FocusNode focusNode;
   final Language item;
   final Function onTap;
-
+  final bool isFocused;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => onTap(),
       child: Card(
-        elevation: focusNode.hasFocus?10:4,
+        elevation: isFocused?10:4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           //set border radius more than 50% of height and width to make circle
         ),
-        child: focusNode.hasFocus?Container():Container(
+        child:Container(
           padding: EdgeInsets.only(
             right: 0.4.w,
           ),
           height: 11.h,
           width: 40.w,
           decoration: BoxDecoration(
+            border: isFocused ? Border.all(color: Colors.blue, width: 2) : null,
             borderRadius: BorderRadius.circular(10),
             image: DecorationImage(
               fit: BoxFit.fill,

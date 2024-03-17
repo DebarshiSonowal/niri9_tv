@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Focus(
                   focusNode: _languageSectionFocusNode,
-                  child: LanguageSection(
+                  child:LanguageSection(
                     firstLanguageItemFocusNode: _firstLanguageItemFocusNode,
                     scrollController: _scrollController,
                     onScroll: (UserScrollNotification notification) {},
@@ -85,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _focusNextElement() {
+    debugPrint("Has234");
     // Logic to determine and shift focus to the next element based on current focus
     if (_bannerFocusNode.hasFocus) {
       FocusScope.of(context).requestFocus(_languageSectionFocusNode);

@@ -26,7 +26,7 @@ import '../Models/video_details.dart';
 import '../Storage/storage.dart';
 
 class Repository extends ChangeNotifier {
-  int _currentIndex = 0;
+  int _currentIndex = 0,focusedLanguageIndex=0;
   List<Category> _categories = [];
   List<Video> _specificVideos = [],
       _recently_viewed_list = [],
@@ -375,6 +375,11 @@ class Repository extends ChangeNotifier {
 
   void setVideoPercent(List<VideoPercent> val) {
     videoPercent = val;
+    notifyListeners();
+  }
+  void updateLanguageFocused(int val) {
+    focusedLanguageIndex = val;
+    debugPrint("Setting language $val");
     notifyListeners();
   }
 
