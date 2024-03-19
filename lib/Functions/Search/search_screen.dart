@@ -13,7 +13,9 @@ import '../home/widgets/otp_item.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key, this.filters});
+
   final String? filters;
+
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
@@ -24,26 +26,26 @@ class _SearchScreenState extends State<SearchScreen> {
   // Sections? selectedSections;
   Category? selectedCategory;
   int page_no = 1;
-  String currentSearch="";
+  String currentSearch = "";
   final searchEditingController = TextEditingController();
+  List<FocusNode> focus = [];
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      Provider.of<Repository>(context,listen: false).updateIndex(1);
+      Provider.of<Repository>(context, listen: false).updateIndex(1);
       selectedCategory =
-      Provider.of<Repository>(context, listen: false).categories[0];
+          Provider.of<Repository>(context, listen: false).categories[0];
       setState(() {});
       if (widget.filters != "") {
         selectedCategory = Provider.of<Repository>(context, listen: false)
             .categories
             .firstWhere((element) => element.name == widget.filters);
         search("");
-      }else{
+      } else {
         search("");
       }
-
     });
     searchEditingController.addListener(() {
       setState(() {
@@ -57,7 +59,9 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(6.h),
-        child: CommonAppbar(title: "Search",),
+        child: CommonAppbar(
+          title: "Search",
+        ),
       ),
       body: Container(
         padding: EdgeInsets.symmetric(
@@ -79,10 +83,10 @@ class _SearchScreenState extends State<SearchScreen> {
                   onChanged: (String val) {
                     suggest(val);
                   },
-                  style:  Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.white38,
-                    fontSize: 12.sp,
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.white38,
+                        fontSize: 12.sp,
+                      ),
                   decoration: InputDecoration(
                     // labelText: 'Search',
                     hintText: 'Search...',
@@ -93,11 +97,10 @@ class _SearchScreenState extends State<SearchScreen> {
                       color: Colors.grey.shade800,
                       size: 16.sp,
                     ),
-                    hintStyle:
-                        Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.white38,
-                              fontSize: 10.sp,
-                            ),
+                    hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.white38,
+                          fontSize: 10.sp,
+                        ),
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(10.0),
@@ -123,6 +126,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       var item = data.specificVideos[index];
                       return OttItem(
+                        focus:focus[index],
                         item: item,
                         onTap: () {
                           if (Storage.instance.isLoggedIn) {
@@ -143,6 +147,7 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
+
   void search(String search) async {
     // Navigation.instance.navigate(Routes.loadingScreen);
     final response = await ApiProvider.instance.search(search);
@@ -155,6 +160,7 @@ class _SearchScreenState extends State<SearchScreen> {
       // Navigation.instance.goBack();
     }
   }
+
   void suggest(String search) async {
     // Navigation.instance.navigate(Routes.loadingScreen);
     final response = await ApiProvider.instance.search(search);

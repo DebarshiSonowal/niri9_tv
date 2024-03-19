@@ -12,20 +12,20 @@ class OttItem extends StatelessWidget {
   const OttItem({
     super.key,
     required this.item,
-    required this.onTap,this.onLongPressed,
+    required this.onTap,this.onLongPressed, required this.focus,
   });
 
   final Video item;
   final Function onTap;
   final Function? onLongPressed;
-
+  final FocusNode focus;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => onTap(),
       onLongPress: ()=>onLongPressed!(),
       child: Card(
-        elevation: 4,
+        elevation: focus.hasFocus? 10:4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),
@@ -33,6 +33,7 @@ class OttItem extends StatelessWidget {
           width: 34.w,
           decoration: BoxDecoration(
             // color: Colors.red,
+            border: focus.hasFocus ? Border.all(color: Colors.blue, width: 2) : null,
             borderRadius: BorderRadius.circular(5),
           ),
           child: ClipRRect(

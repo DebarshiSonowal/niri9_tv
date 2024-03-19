@@ -5,6 +5,7 @@ import 'package:niri9_tv/Functions/home/widgets/language_section.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Constants/assets.dart';
+import '../../Constants/constants.dart';
 import '../../Widgets/common_appbar.dart';
 import 'widgets/dynamic_list_section_home.dart';
 import 'widgets/recently_viewed_section.dart';
@@ -33,27 +34,43 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FocusableActionDetector(
-      actions: {
-        NextFocusAction: CallbackAction<NextFocusIntent>(
-            onInvoke: (intent) => _focusNextElement()),
-        PreviousFocusAction: CallbackAction<PreviousFocusIntent>(
-            onInvoke: (intent) => _focusPreviousElement()),
-      },
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(6.h),
-          child: CommonAppbar(
-            title: "Home",
-          ),
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(6.h),
+        child: CommonAppbar(
+          title: "Home",
         ),
-        body: Container(
+      ),
+      body:  RawKeyboardListener(
+        focusNode: FocusNode(), // Add a top-level FocusNode
+        onKey: (RawKeyEvent event) {
+          if (event is RawKeyDownEvent &&
+              event.data is RawKeyEventDataAndroid) {
+            RawKeyDownEvent rawKeyDownEvent = event;
+            RawKeyEventData rawKeyEventDataAndroid = rawKeyDownEvent.data;
+            debugPrint(
+                "rawKeyDownEventDataAndroid ${rawKeyDownEvent.data.logicalKey
+                    .hashCode}");
+            switch (rawKeyDownEvent.data.logicalKey.hashCode) {
+              case Constants.KEY_UP:
+                _focusPreviousElement();
+                break;
+              case Constants.KEY_DOWN:
+                _focusNextElement();
+                break;
+            // // ... add cases for other keys if needed
+            }
+          }
+        },
+        child: SizedBox(
           height: double.infinity,
           width: double.infinity,
           child: SingleChildScrollView(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Focus(focusNode: _bannerFocusNode, child: const HomeBanner()),
+                // HomeBanner(),
                 TitleBox(
                   text: "Explore in your language",
                   onTap: () {},
@@ -61,16 +78,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Focus(
                   focusNode: _languageSectionFocusNode,
-                  child:LanguageSection(
+                  child: LanguageSection(
+                    languageSectionFocusNode:_languageSectionFocusNode,
                     firstLanguageItemFocusNode: _firstLanguageItemFocusNode,
                     scrollController: _scrollController,
                     onScroll: (UserScrollNotification notification) {},
                   ),
                 ),
-                Focus(
-                  focusNode: _recentlyViewedFocusNode,
-                  child: const RecentlyViewedSection(),
-                ),
+                // LanguageSection(
+                //   firstLanguageItemFocusNode: _firstLanguageItemFocusNode,
+                //   scrollController: _scrollController,
+                //   onScroll: (UserScrollNotification notification) {},
+                // ),
+                // Focus(
+                //   focusNode: _recentlyViewedFocusNode,
+                //   child: const RecentlyViewedSection(),
+                // ),
                 Focus(
                   focusNode: _dynamicListSection1FocusNode,
                   child: const DynamicListSectionHome(),
@@ -78,7 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          // color,
         ),
       ),
     );

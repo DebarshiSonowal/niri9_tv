@@ -31,6 +31,7 @@ class DynamicPremiumListItem extends StatefulWidget {
 class _DynamicPremiumListItemState extends State<DynamicPremiumListItem> {
   bool isEnd = false;
   final ScrollController _scrollController = ScrollController();
+  List<FocusNode> focus = [];
 
   @override
   void initState() {
@@ -102,6 +103,7 @@ class _DynamicPremiumListItemState extends State<DynamicPremiumListItem> {
                   var item = widget.list[index];
                   return OttItem(
                     // index: index,
+                    focus:focus[index],
                     item: item,
                     onTap: () {
                       if (Storage.instance.isLoggedIn) {

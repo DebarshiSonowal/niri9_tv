@@ -30,4 +30,9 @@ PRIOR TO MAKING A PAYMENT.""";
   static const about =
       """NIRI 9 is an OTT platform which will be streaming web series, movies, animations, documentaries and music across the globe.
 NIRI 9 is a part of NIRI Media (OPC) Private Limited based in Guwahati, India.""";
+
+  static const KEY_RIGHT = 8935330;
+  static const KEY_LEFT = 8937715;
+  static const KEY_DOWN = 8916224;
+  static const KEY_UP = 8946965;
 }

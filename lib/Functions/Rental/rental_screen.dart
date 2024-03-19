@@ -23,13 +23,16 @@ class RentalScreen extends StatefulWidget {
 class _RentalScreenState extends State<RentalScreen> {
   final ScrollController _scrollController = ScrollController();
   int page = 1;
+  List<FocusNode> focus = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(6.h),
-        child:CommonAppbar(title: "Rental",),
+        child: CommonAppbar(
+          title: "Rental",
+        ),
       ),
       body: Container(
         padding: EdgeInsets.symmetric(
@@ -41,14 +44,12 @@ class _RentalScreenState extends State<RentalScreen> {
         child: FutureBuilder(
             builder: (context, _) {
               if (_.hasData && (_.data != [])) {
-                return Consumer<Repository>(
-                    builder: (context, data, _) {
+                return Consumer<Repository>(builder: (context, data, _) {
                   return GridView.builder(
                     shrinkWrap: true,
                     controller: _scrollController,
                     itemCount: data.specificVideos.length,
-                    gridDelegate:
-                        SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 5,
                       crossAxisSpacing: 1.5.w,
                       mainAxisSpacing: 1.h,
@@ -57,17 +58,18 @@ class _RentalScreenState extends State<RentalScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       var item = data.specificVideos[index];
                       return OttItem(
-                          item: item,
-                          onTap: () {
-                            if (Storage.instance.isLoggedIn) {
-                              // Navigation.instance.navigate(
-                              //     Routes.watchScreen,
-                              //     args: item.id);
-                            } else {
-                              CommonFunctions()
-                                  .showLoginDialog(context);
-                            }
-                          });
+                        item: item,
+                        onTap: () {
+                          if (Storage.instance.isLoggedIn) {
+                            // Navigation.instance.navigate(
+                            //     Routes.watchScreen,
+                            //     args: item.id);
+                          } else {
+                            CommonFunctions().showLoginDialog(context);
+                          }
+                        },
+                        focus: focus[index],
+                      );
                     },
                   );
                 });

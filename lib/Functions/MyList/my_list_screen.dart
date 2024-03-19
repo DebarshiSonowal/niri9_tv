@@ -21,6 +21,7 @@ class MyListScreen extends StatefulWidget {
 class _MyListScreenState extends State<MyListScreen> {
   final ScrollController _scrollController = ScrollController();
   int page = 1;
+  List<FocusNode> focus = [];
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class _MyListScreenState extends State<MyListScreen> {
         ),
         child: FutureBuilder(
             builder: (context, _) {
-              if (_.hasData && (_.data?.isNotEmpty??false)) {
+              if (_.hasData && (_.data?.isNotEmpty ?? false)) {
                 return Consumer<Repository>(builder: (context, data, _) {
                   return GridView.builder(
                     shrinkWrap: true,
@@ -55,21 +56,23 @@ class _MyListScreenState extends State<MyListScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       var item = data.wishList[index];
                       return OttItem(
-                          item: item,
-                          onTap: () {
-                            if (Storage.instance.isLoggedIn) {
-                              // Navigation.instance.navigate(
-                              //     Routes.watchScreen,
-                              //     args: item.id);
-                            } else {
-                              CommonFunctions().showLoginDialog(context);
-                            }
-                          });
+                        item: item,
+                        onTap: () {
+                          if (Storage.instance.isLoggedIn) {
+                            // Navigation.instance.navigate(
+                            //     Routes.watchScreen,
+                            //     args: item.id);
+                          } else {
+                            CommonFunctions().showLoginDialog(context);
+                          }
+                        },
+                        focus: focus[index],
+                      );
                     },
                   );
                 });
               }
-              if (_.hasData && (_.data?.isEmpty??true)) {
+              if (_.hasData && (_.data?.isEmpty ?? true)) {
                 return Center(
                   child: Container(
                     child: Text(
